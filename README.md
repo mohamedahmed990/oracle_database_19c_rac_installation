@@ -3,18 +3,18 @@
 
 ### **Table of Contents**
 
-1. [**Prepare Network Requirements**](https://www.notion.so/Oracle-19c-RAC-Installation-19a0c6dfd6c6800480b5ffe11cdc45b3?pvs=21)
-2. [**Operating System Configuration**](https://www.notion.so/Oracle-19c-RAC-Installation-19a0c6dfd6c6800480b5ffe11cdc45b3?pvs=21)
-3. [**Configure Users and Groups**](https://www.notion.so/Oracle-19c-RAC-Installation-19a0c6dfd6c6800480b5ffe11cdc45b3?pvs=21)
-4. [**Create Installation Directories**](https://www.notion.so/Oracle-19c-RAC-Installation-19a0c6dfd6c6800480b5ffe11cdc45b3?pvs=21)
-5. [**Clone Node1 to Create Node2**](https://www.notion.so/Oracle-19c-RAC-Installation-19a0c6dfd6c6800480b5ffe11cdc45b3?pvs=21)
-6. [**Configure Shared Disks Using Oracle ASM**](https://www.notion.so/Oracle-19c-RAC-Installation-19a0c6dfd6c6800480b5ffe11cdc45b3?pvs=21)
-7. [**Set Up `.bash_profile` for Grid and Oracle Users**](https://www.notion.so/Oracle-19c-RAC-Installation-19a0c6dfd6c6800480b5ffe11cdc45b3?pvs=21)
-8. [**Install Oracle Grid Infrastructure**](https://www.notion.so/Oracle-19c-RAC-Installation-19a0c6dfd6c6800480b5ffe11cdc45b3?pvs=21)
-9. [**Mounting ASM Disk Groups Using ASMCA**](https://www.notion.so/Oracle-19c-RAC-Installation-19a0c6dfd6c6800480b5ffe11cdc45b3?pvs=21) 
-10. [**Install Oracle Database Software**](https://www.notion.so/Oracle-19c-RAC-Installation-19a0c6dfd6c6800480b5ffe11cdc45b3?pvs=21)
-11. [**Create a RAC Database**](https://www.notion.so/Oracle-19c-RAC-Installation-19a0c6dfd6c6800480b5ffe11cdc45b3?pvs=21)
-12. [**Verification and Testing**](https://www.notion.so/Oracle-19c-RAC-Installation-19a0c6dfd6c6800480b5ffe11cdc45b3?pvs=21)
+1. **Prepare Network Requirements**
+2. **Operating System Configuration**
+3. **Configure Users and Groups**
+4. **Create Installation Directories**
+5. **Clone Node1 to Create Node2**
+6. **Configure Shared Disks Using Oracle ASM**
+7. **Set Up `.bash_profile` for Grid and Oracle Users**
+8. **Install Oracle Grid Infrastructure**
+9. **Mounting ASM Disk Groups Using ASMCA** 
+10. **Install Oracle Database Software**
+11. **Create a RAC Database**
+12. **Verification and Testing**
 
 ---
 
