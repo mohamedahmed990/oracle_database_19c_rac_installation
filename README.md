@@ -1,4 +1,5 @@
 # oracle_database_19c_rac_installation
+
 ---
 
 ### **Table of Contents**
@@ -11,7 +12,7 @@
 6. **Configure Shared Disks Using Oracle ASM**
 7. **Set Up `.bash_profile` for Grid and Oracle Users**
 8. **Install Oracle Grid Infrastructure**
-9. **Mounting ASM Disk Groups Using ASMCA** 
+9. **Mounting ASM Disk Groups Using ASMCA**
 10. **Install Oracle Database Software**
 11. **Create a RAC Database**
 12. **Verification and Testing**
@@ -25,35 +26,39 @@
 **Public Network (enp0s3)**:
 
 ```bash
-nmcli connection add type ethernet con-name "public" ifname enp0s3 \
-ipv4.addresses "192.168.56.105/24" \
-ipv4.gateway "192.168.56.1" \
-ipv4.dns "192.168.56.1" \
-ipv4.method "manual" \
+nmcli connection add type ethernet con-name "public" ifname enp0s3 \\
+ipv4.addresses "192.168.56.105/24" \\
+ipv4.gateway "192.168.56.1" \\
+ipv4.dns "192.168.56.1" \\
+ipv4.method "manual" \\
 connection.autoconnect "yes"
+
 ```
 
 **Private Network (enp0s8)**:
 
 ```bash
-nmcli connection add type ethernet con-name "private" ifname enp0s8 \
-ipv4.addresses "192.168.10.1/24" \
-ipv4.method "manual" \
+nmcli connection add type ethernet con-name "private" ifname enp0s8 \\
+ipv4.addresses "192.168.10.1/24" \\
+ipv4.method "manual" \\
 connection.autoconnect "yes"
+
 ```
 
 **Bridged Adapter (enp0s9):**
 
 ```bash
-nmcli connection add type ethernet con-name "internet" ifname enp0s9 \
-ipv4.method "auto" \
+nmcli connection add type ethernet con-name "internet" ifname enp0s9 \\
+ipv4.method "auto" \\
 connection.autoconnect "yes"
+
 ```
 
 ### **1.2 List connections to verify creation**:
 
 ```bash
 nmcli connection show
+
 ```
 
 ### **1.3 Manually activate any connection (optional)**:
@@ -62,6 +67,7 @@ nmcli connection show
 nmcli connection up public
 nmcli connection up private
 nmcli connection up internet
+
 ```
 
 ### **1.4 Configure Hostnames and IPs**
@@ -81,17 +87,18 @@ Edit `/etc/hosts` :
 192.168.56.81   node1-vip.localdomain     node1-vip
 192.168.56.82   node2-vip.localdomain     node2-vip
 
-# SCAN 
+# SCAN
 192.168.56.91   node-scan.localdomain     node-scan
 
 ```
 
 ### **1.5 Verify Network Connectivity**
 
- In the hosting PC, open a command prompt window and ping the node1 public IP address.
+In the hosting PC, open a command prompt window and ping the node1 public IP address.
 
 ```bash
-ping 192.168.56.105 
+ping 192.168.56.105
+
 ```
 
 ## **2. Configure Users and Groups**
@@ -101,9 +108,10 @@ ping 192.168.56.105
 Create the following groups :
 
 ```bash
-groupadd asmadmin 
-groupadd asmdba 
+groupadd asmadmin
+groupadd asmdba
 groupadd oinstall
+
 ```
 
 ### **2.2 Create Oracle Users**
@@ -111,8 +119,9 @@ groupadd oinstall
 Create the `oracle` and `grid` users :
 
 ```bash
-useradd -u 54323 -g oinstall -G asmadmin,asmdba grid 
-usermod -a -g oinstall -G asmdba oracle 
+useradd -u 54323 -g oinstall -G asmadmin,asmdba grid
+usermod -a -g oinstall -G asmdba oracle
+
 ```
 
 ### **2.3 Set Passwords**
@@ -199,6 +208,7 @@ grid     hard   memlock    3145728
 ```bash
 systemctl stop firewalld
 systemctl disable firewalld
+
 ```
 
 ### 3.6 Set `selinux` to permissive
@@ -206,6 +216,7 @@ systemctl disable firewalld
 ```bash
 cd /etc/selinux/
 vi config
+
 ```
 
 Edit the `config` file to be like the following :
@@ -222,6 +233,7 @@ SELINUX=permissive
 #     minimum - Modification of targeted policy. Only selected processes are protected.
 #     mls - Multi Level Security protection.
 SELINUXTYPE=targeted
+
 ```
 
 ---
@@ -237,6 +249,7 @@ create the following directories for Oracle Grid Infrastructure:
 ```bash
 sudo mkdir -p /u01/app/19.0.0/grid
 sudo mkdir -p /u01/app/grid
+
 ```
 
 Set the correct ownership and permissions:
@@ -254,6 +267,7 @@ create the following directories for Oracle Database:
 
 ```bash
 sudo mkdir -p /u01/app/oracle/product/19.0.0/dbhome_1
+
 ```
 
 Set the correct ownership and permissions:
@@ -274,7 +288,6 @@ Ensure the following conditions are met before cloning:
 
 - The source VM (node1) is powered off to prevent data corruption or inconsistencies.
 - Adequate disk space is available for the clone.
-
 
 ### **5.2. Cloning Process**
 
@@ -316,6 +329,7 @@ In the VirtualBox Manager, locate and select the VM you want to clone.
     
     ```bash
     hostnamectl set-hostname node2.localdomain
+    
     ```
     
 
@@ -323,14 +337,12 @@ In the VirtualBox Manager, locate and select the VM you want to clone.
 
 Since the cloned machine has new MAC addresses, you’ll need to update or recreate the connections to reflect these changes. `nmcli` associates network connections with specific MAC addresses, so the old connections might not work with the new ones. Here’s how you can resolve the issue:
 
-
 **1. Remove the Old Connections**
 
 First, check the current connections to identify any old ones:
 
 ```bash
 nmcli connection show
-
 ```
 
 If the old connections still reference the previous MAC addresses, you can delete them:
@@ -341,8 +353,6 @@ nmcli connection delete private
 nmcli connection delete internet
 
 ```
-
-
 
 **2. Create New Connections (with the new MAC addresses)**
 
@@ -357,39 +367,33 @@ You can recreate the connections as follows:
 **Public Connection (`enp0s3`):**
 
 ```bash
-nmcli connection add type ethernet con-name "public" ifname enp0s3 \
-ipv4.addresses "192.168.56.106/24" \
-ipv4.gateway "192.168.56.1" \
-ipv4.dns "192.168.56.1" \
-ipv4.method "manual" \
+nmcli connection add type ethernet con-name "public" ifname enp0s3 \\
+ipv4.addresses "192.168.56.106/24" \\
+ipv4.gateway "192.168.56.1" \\
+ipv4.dns "192.168.56.1" \\
+ipv4.method "manual" \\
 connection.autoconnect "yes"
 
 ```
-
-
 
 **Private Connection (`enp0s8`):**
 
 ```bash
-nmcli connection add type ethernet con-name "private" ifname enp0s8 \
-ipv4.addresses "192.168.10.2/24" \
-ipv4.method "manual" \
+nmcli connection add type ethernet con-name "private" ifname enp0s8 \\
+ipv4.addresses "192.168.10.2/24" \\
+ipv4.method "manual" \\
 connection.autoconnect "yes"
 
 ```
-
-
 
 **Internet Connection (`enp0s9`):**
 
 ```bash
-nmcli connection add type ethernet con-name "internet" ifname enp0s9 \
-ipv4.method "auto" \
+nmcli connection add type ethernet con-name "internet" ifname enp0s9 \\
+ipv4.method "auto" \\
 connection.autoconnect "yes"
 
 ```
-
-
 
 **3. Restart NetworkManager**
 
@@ -399,7 +403,6 @@ After creating new connections, restart the network service:
 sudo systemctl restart NetworkManager
 
 ```
-
 
 **4. Verify and Activate the Connections**
 
@@ -434,28 +437,105 @@ ping -c 3 node2
 ping -c 3 node2.localdomain
 ping -c 3 node2-priv
 ping -c 3 node2-priv.localdomain
+
 ```
 
 ---
 
 ## **6. Configure Shared Disks Using Oracle ASM**
 
-### **6.1 Install Oracle ASM Library**
+### 6.1 Create virtual disks steps:
+
+1. **Shut Down Both Virtual Machines**
+    - Ensure both `node1` and `node2` VMs are powered off.
+2. **Create First Shared Disk (DISK1)**
+    - Open **Oracle VirtualBox**.
+    - Select the `node1` VM.
+    - Click **Settings** → **Storage** → **SATA Controller** icon → **Add Hard Disk** button.
+    - In the pop-up window, click **Create new disk**.
+3. **Disk Configuration**
+    - **Hard Disk File Type:** Select `VDI (VirtualBox Disk Image)`. Click **Next**.
+    - **Storage on Physical Hard Disk:** Select **Fixed Size**. Click **Next**.
+    - **File Location and Size:**
+        - Click the folder icon and choose the parent folder of `node1`.
+        - Name the disk `DISK1.vdi` and set the size to **10 GB**.
+        - Click **Create**.
+4. **Create Additional Disks (DISK2 and DISK3)**
+    - Repeat the above steps to create `DISK2` and `DISK3`, each with **15 GB** size.
+    - Ensure they are saved in the same parent folder as `DISK1`.
+5. **Change Disks to Shareable**
+    - In VirtualBox, go to **File** → **Virtual Media Manager (Ctrl+D)**.
+    - Select `DISK1`, change its type to **Shareable**, and click **Apply**.
+    - Repeat for `DISK2` and `DISK3`.
+    - Close the **Virtual Media Manager** window.
+6. **Attach Shared Disks to `node2`**
+    - In Oracle VirtualBox, select the `node2` VM.
+    - Click **Settings** → **Storage**.
+    - Under **SATA Controller**, click the **Add Hard Disk** icon.
+    - Click **Choose existing disk** and select the shared disk (`DISK1`).
+    - Repeat for `DISK2` and `DISK3`.
+    - Click **OK** to close the storage settings.
+
+---
+
+### **6.2 Starting `node1` and Listing Shared Disks**
+
+1. **Start `node1`**
+    - Power on `node1`.
+2. **List Attached Disks**
+    
+    Run the following command to verify the attached shared disks:
+    
+    ```bash
+    ls /dev/sd*
+    ```
+    
+    You should see `sdb`, `sdc`, and `sdd` listed.
+    
+
+---
+
+### **6.3 Partitioning Shared Disks with `fdisk`**
+
+1. **Partition `DISK1` (`/dev/sdb`)**
+    
+    Run the `fdisk` utility:
+    
+    ```bash
+    fdisk /dev/sdb
+    ```
+    
+    - Follow these steps:
+        - Command: `n` (create new partition)
+        - Command: `p` (primary partition)
+        - Partition number: `1`
+        - Accept defaults for the first and last cylinders by pressing **Enter** twice.
+        - Command: `w` (write changes and exit).
+2. **Partition `DISK2` and `DISK3`**
+    - Repeat the `fdisk` steps for `/dev/sdc` and `/dev/sdd`.
+3. **List the Partitions**
+    
+    Verify the partitions have been created by running:
+    
+    ```bash
+    ls /dev/sd*
+    ```
+    
+
+### **6.4 Install Oracle ASM Library**
 
 Install the `oracleasm` library and tools:
 
 ```bash
 sudo dnf install -y kmod-oracleasm oracleasm-support
-
 ```
 
-### **6.2 Configure Oracle ASM**
+### **6.5 Configure Oracle ASM**
 
 Run the Oracle ASM configuration tool:
 
 ```bash
 sudo oracleasm configure -i
-
 ```
 
 Provide the following inputs:
@@ -465,26 +545,26 @@ Provide the following inputs:
 - Start Oracle ASM library driver on boot: `y`
 - Scan for Oracle ASM disks on boot: `y`
 
-### **6.3 Initialize Oracle ASM**
+### **6.6 Initialize Oracle ASM**
 
 Initialize the Oracle ASM library:
 
 ```bash
 sudo oracleasm init
-
 ```
 
-### **6.4 Create ASM Disks**
+### **6.7 Create ASM Disks**
 
-Partition the shared disks (e.g., `/dev/sdb`, `/dev/sdc`, `/dev/sdd`) using `fdisk` or `parted`. Then, create ASM disks:
+ Then, create ASM disks:
 
 ```bash
 sudo oracleasm createdisk DISK1 /dev/sdb1
 sudo oracleasm createdisk DISK2 /dev/sdc1
 sudo oracleasm createdisk DISK3 /dev/sdd1
+
 ```
 
-### **6.5 Verify ASM Disks**
+### **6.8 Verify ASM Disks**
 
 List the ASM disks:
 
@@ -507,6 +587,7 @@ The `grid` user is responsible for managing Oracle Grid Infrastructure (GI), inc
 su - grid
 mv ~/.bash_profile ~/.bash_profile_bkp
 vi ~/.bash_profile
+
 ```
 
 Add the following lines:
@@ -514,16 +595,17 @@ Add the following lines:
 ```bash
 # Oracle Grid Infrastructure Environment
 export ORACLE_HOME=/u01/app/19.0.0/grid
-export ORACLE_SID=+ASM1 
+export ORACLE_SID=+ASM1
 export ORACLE_BASE=/u01/app/grid
-ORACLE_TERM=xterm; export ORACLE_TERM 
-TNS_ADMIN=$ORACLE_HOME/network/admin; export TNS_ADMIN 
-PATH=.:${PATH}:$ORACLE_HOME/bin 
-PATH=${PATH}:/usr/bin:/bin:/usr/local/bin 
-export PATH 
-export TEMP=/tmp 
-export TMPDIR=/tmp 
-umask 022 
+ORACLE_TERM=xterm; export ORACLE_TERM
+TNS_ADMIN=$ORACLE_HOME/network/admin; export TNS_ADMIN
+PATH=.:${PATH}:$ORACLE_HOME/bin
+PATH=${PATH}:/usr/bin:/bin:/usr/local/bin
+export PATH
+export TEMP=/tmp
+export TMPDIR=/tmp
+umask 022
+
 ```
 
 Save and exit, then apply the changes:
@@ -547,16 +629,17 @@ Add the following lines:
 ```bash
 # Oracle Grid Infrastructure Environment
 export ORACLE_HOME=/u01/app/19.0.0/grid
-export ORACLE_SID=+ASM2 
+export ORACLE_SID=+ASM2
 export ORACLE_BASE=/u01/app/grid
-ORACLE_TERM=xterm; export ORACLE_TERM 
-TNS_ADMIN=$ORACLE_HOME/network/admin; export TNS_ADMIN 
-PATH=.:${PATH}:$ORACLE_HOME/bin 
-PATH=${PATH}:/usr/bin:/bin:/usr/local/bin 
-export PATH 
-export TEMP=/tmp 
-export TMPDIR=/tmp 
-umask 022 
+ORACLE_TERM=xterm; export ORACLE_TERM
+TNS_ADMIN=$ORACLE_HOME/network/admin; export TNS_ADMIN
+PATH=.:${PATH}:$ORACLE_HOME/bin
+PATH=${PATH}:/usr/bin:/bin:/usr/local/bin
+export PATH
+export TEMP=/tmp
+export TMPDIR=/tmp
+umask 022
+
 ```
 
 Save and exit, then apply the changes:
@@ -586,22 +669,22 @@ Add the following lines:
 ```bash
 # Oracle Database Environment
 export ORACLE_HOME=/u01/app/oracle/product/19.0.0/dbhome_1
-export ORACLE_SID=rac1  
+export ORACLE_SID=rac1
 export ORACLE_BASE=/u01/app/oracle
-ORACLE_TERM=xterm; export ORACLE_TERM 
-NLS_DATE_FORMAT="DD-MON-YYYY HH24:MI:SS"; export NLS_DATE_FORMAT 
-TNS_ADMIN=$ORACLE_HOME/network/admin; export TNS_ADMIN 
-PATH=.:${PATH}:$ORACLE_HOME/bin 
-PATH=${PATH}:/usr/bin:/bin:/usr/local/bin 
-export PATH 
-LD_LIBRARY_PATH=$ORACLE_HOME/lib 
-LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:$ORACLE_HOME/oracm/lib 
-LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/lib:/usr/lib:/usr/local/lib 
-export LD_LIBRARY_PATH 
-THREADS_FLAG=native; export THREADS_FLAG 
-export TEMP=/tmp 
-export TMPDIR=/tmp 
-export EDITOR=vi 
+ORACLE_TERM=xterm; export ORACLE_TERM
+NLS_DATE_FORMAT="DD-MON-YYYY HH24:MI:SS"; export NLS_DATE_FORMAT
+TNS_ADMIN=$ORACLE_HOME/network/admin; export TNS_ADMIN
+PATH=.:${PATH}:$ORACLE_HOME/bin
+PATH=${PATH}:/usr/bin:/bin:/usr/local/bin
+export PATH
+LD_LIBRARY_PATH=$ORACLE_HOME/lib
+LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:$ORACLE_HOME/oracm/lib
+LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/lib:/usr/lib:/usr/local/lib
+export LD_LIBRARY_PATH
+THREADS_FLAG=native; export THREADS_FLAG
+export TEMP=/tmp
+export TMPDIR=/tmp
+export EDITOR=vi
 umask 022
 
 ```
@@ -610,7 +693,6 @@ Save and exit, then apply the changes:
 
 ```bash
 source ~/.bash_profile
-
 ```
 
 ### **On Node2:**
@@ -619,7 +701,6 @@ source ~/.bash_profile
 su - oracle
 mv ~/.bash_profile ~/.bash_profile_bkp
 vi ~/.bash_profile
-
 ```
 
 Add the following lines:
@@ -627,22 +708,22 @@ Add the following lines:
 ```bash
 # Oracle Database Environment
 export ORACLE_HOME=/u01/app/oracle/product/19.0.0/dbhome_1
-export ORACLE_SID=rac2  
+export ORACLE_SID=rac2
 export ORACLE_BASE=/u01/app/oracle
-ORACLE_TERM=xterm; export ORACLE_TERM 
-NLS_DATE_FORMAT="DD-MON-YYYY HH24:MI:SS"; export NLS_DATE_FORMAT 
-TNS_ADMIN=$ORACLE_HOME/network/admin; export TNS_ADMIN 
-PATH=.:${PATH}:$ORACLE_HOME/bin 
-PATH=${PATH}:/usr/bin:/bin:/usr/local/bin 
-export PATH 
-LD_LIBRARY_PATH=$ORACLE_HOME/lib 
-LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:$ORACLE_HOME/oracm/lib 
-LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/lib:/usr/lib:/usr/local/lib 
-export LD_LIBRARY_PATH 
-THREADS_FLAG=native; export THREADS_FLAG 
-export TEMP=/tmp 
-export TMPDIR=/tmp 
-export EDITOR=vi 
+ORACLE_TERM=xterm; export ORACLE_TERM
+NLS_DATE_FORMAT="DD-MON-YYYY HH24:MI:SS"; export NLS_DATE_FORMAT
+TNS_ADMIN=$ORACLE_HOME/network/admin; export TNS_ADMIN
+PATH=.:${PATH}:$ORACLE_HOME/bin
+PATH=${PATH}:/usr/bin:/bin:/usr/local/bin
+export PATH
+LD_LIBRARY_PATH=$ORACLE_HOME/lib
+LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:$ORACLE_HOME/oracm/lib
+LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/lib:/usr/lib:/usr/local/lib
+export LD_LIBRARY_PATH
+THREADS_FLAG=native; export THREADS_FLAG
+export TEMP=/tmp
+export TMPDIR=/tmp
+export EDITOR=vi
 umask 022
 
 ```
@@ -660,29 +741,33 @@ source ~/.bash_profile
 
 ### 8.1 Copy Grid Infrastructure Software to your machine using winscp (node1)
 
-as grid user , copy grid software to your grid (os) home and ensure it’s exist :
+as grid user , copy grid software to your grid  home (`/home/grid`) and ensure it’s exist :
 
 ```bash
 ls /home/grid/LINUX.X64_193000_grid_home.zip
 /home/grid/LINUX.X64_193000_grid_home.zip
+
 ```
 
 ### 8.2 Extract Grid Software in the $ORACLE_HOME of the grid user :
 
 ```bash
 unzip LINUX.X64_193000_grid_home.zip -d $ORACLE_HOME/
+
 ```
 
 ### 8.3 Create SSH Passwordless connection to grid user
 
 ```bash
 cd $ORACLE_HOME/deinstall
+
 ```
 
 then you can run the following script to create ssh passwordless :
 
 ```bash
 ./sshUserSetup.sh -user grid -hosts "node1 node2" -noPromptPassphrase -confirm -advanced
+
 ```
 
 also create ssh passwordless for oracle user :
@@ -691,14 +776,52 @@ also create ssh passwordless for oracle user :
 ./sshUserSetup.sh -user oracle -hosts "node1 node2" -noPromptPassphrase -confirm -advanced
 ```
 
-### **8.4 Run the Grid Installer**
+### 8.4 Perform Prerequisite Actions:
+
+In `node1` and `node2`, disable avahi-daemon. This daemon should not be running with Oracle clusterware services.
+
+```bash
+systemctl disable avahi-daemon.socket avahi-daemon.service
+systemctl mask avahi-daemon.socket avahi-daemon.service
+systemctl stop avahi-daemon.socket avahi-daemon.service
+```
+
+In `node1` and `node2` as root, disable the chronyd service and rename its configuration file:
+
+```bash
+systemctl disable chronyd
+mv /etc/chrony.conf /etc/chrony.conf.bak
+```
+
+**As `root`, install the cvuqdisk in node1**
+
+The package cvuqdisk must be installed before installing the Clusterware software
+
+```bash
+cd /u01/app/19.0.0/grid/cv/rpm/ 
+CVUQDISK_GRP=oinstall; export CVUQDISK_GRP 
+rpm -iv cvuqdisk-1.0.10-1.rpm
+```
+
+then, copy the cvuqdisk package to node2  
+
+```bash
+scp cvuqdisk-1.0.10-1.rpm root@node2:/root
+```
+
+now in `node2`, install it using `root` 
+
+```bash
+rpm -iv cvuqdisk-1.0.10-1.rpm
+```
+
+### **8.5 Run the Grid Installer**
 
 On Node1, run the Grid Infrastructure installer:
 
 ```bash
 cd $ORACLE_HOME
 ./gridSetup.sh
-
 ```
 
 ### **Step-by-Step Installation Wizard**
@@ -814,13 +937,15 @@ cd $ORACLE_HOME
 In node1, check the status of the running clusterware resources. The state of all the resources should be ONLINE:
 
 ```bash
-crsctl status resource -t 
+crsctl status resource -t
+
 ```
 
- Ensure that all the cluster services are up and running in all the cluster nodes:
+Ensure that all the cluster services are up and running in all the cluster nodes:
 
 ```bash
-crsctl check cluster -all 
+crsctl check cluster -all
+
 ```
 
 ---
@@ -859,21 +984,40 @@ crsctl check cluster -all
 
 ## **10. Install Oracle Database Software**
 
-### 10.1 Copy the oracle database software to oracle (OS) home using winscp
+perform the following steps as `oracle` user to install oracle database software 
 
-### 10.2 unzip the software in the $ORACLE_HOME :
+### 10.1 Copy the oracle database software to oracle home ( `/home/oracle`) using winscp
+
+### 10.2 unzip the software in the `$ORACLE_HOME` :
 
 ```bash
 unzip LINUX.X64_193000_db_home.zip -d $ORACLE_HOME
 ```
 
-### **10.3 Run the Database Installer**
+### 10.3 Creating `sqlnet.ora` file
+
+ create the `sqlnet.ora` file  
+
+```bash
+mkdir -p $ORACLE_HOME/network/admin 
+vi $ORACLE_HOME/network/admin/sqlnet.ora 
+```
+
+then , add the following code in it
+
+```bash
+DIAG_ADR_ENABLED=ON 
+NAMES.DIRECTORY_PATH= (TNSNAMES, EZCONNECT)
+```
+
+### **10.4 Run the Database Installer**
 
 On Node1, run the Database installer:
 
 ```bash
 cd $ORACLE_HOME
 ./runInstaller
+
 ```
 
 ### **Step-by-Step Installation Wizard**
@@ -931,7 +1075,6 @@ On Node1, run the Database Configuration Assistant (DBCA):
 
 ```bash
 dbca
-
 ```
 
 ### **Step-by-Step DBCA Wizard**
@@ -1006,26 +1149,30 @@ dbca
 Make sure that the SCAN hostname replies to ping command.
 
 ```bash
-ping -c 3 node-scan 
+ping -c 3 node-scan
+
 ```
 
 Issue the following commands and examine their output
 
 ```bash
 srvctl status database -d rac
-srvctl config database -d rac 
+srvctl config database -d rac
+
 ```
 
 Identify the database instance names that are currently running on `node1` from the OS command shell:
 
 ```bash
-ps -ef | grep -i pmon 
+ps -ef | grep -i pmon
+
 ```
 
 Make sure the tnsnames.ora file has been configured for connecting to rac database. This has automatically been done by the dbca utility:
 
 ```bash
-cat $TNS_ADMIN/tnsnames.ora 
+cat $TNS_ADMIN/tnsnames.ora
+
 ```
 
 ---
