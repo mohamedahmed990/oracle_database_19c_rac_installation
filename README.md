@@ -66,7 +66,7 @@ nmcli connection up internet
 
 ### **1.4 Configure Hostnames and IPs**
 
-Edit `/etc/hosts` on both nodes:
+Edit `/etc/hosts` :
 
 ```bash
 # Public
@@ -98,7 +98,7 @@ ping 192.168.56.105
 
 ### **2.1 Create Required Groups**
 
-Create the following groups on both nodes:
+Create the following groups :
 
 ```bash
 groupadd asmadmin 
@@ -108,7 +108,7 @@ groupadd oinstall
 
 ### **2.2 Create Oracle Users**
 
-Create the `oracle` and `grid` users on both nodes:
+Create the `oracle` and `grid` users :
 
 ```bash
 useradd -u 54323 -g oinstall -G asmadmin,asmdba grid 
