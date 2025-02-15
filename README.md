@@ -275,7 +275,6 @@ Ensure the following conditions are met before cloning:
 - The source VM (node1) is powered off to prevent data corruption or inconsistencies.
 - Adequate disk space is available for the clone.
 
----
 
 ### **5.2. Cloning Process**
 
@@ -324,7 +323,6 @@ In the VirtualBox Manager, locate and select the VM you want to clone.
 
 Since the cloned machine has new MAC addresses, you’ll need to update or recreate the connections to reflect these changes. `nmcli` associates network connections with specific MAC addresses, so the old connections might not work with the new ones. Here’s how you can resolve the issue:
 
----
 
 **1. Remove the Old Connections**
 
@@ -344,7 +342,7 @@ nmcli connection delete internet
 
 ```
 
----
+
 
 **2. Create New Connections (with the new MAC addresses)**
 
@@ -368,7 +366,7 @@ connection.autoconnect "yes"
 
 ```
 
----
+
 
 **Private Connection (`enp0s8`):**
 
@@ -380,7 +378,7 @@ connection.autoconnect "yes"
 
 ```
 
----
+
 
 **Internet Connection (`enp0s9`):**
 
@@ -391,7 +389,7 @@ connection.autoconnect "yes"
 
 ```
 
----
+
 
 **3. Restart NetworkManager**
 
@@ -402,7 +400,6 @@ sudo systemctl restart NetworkManager
 
 ```
 
----
 
 **4. Verify and Activate the Connections**
 
