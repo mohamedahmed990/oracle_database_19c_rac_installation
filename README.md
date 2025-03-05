@@ -76,8 +76,8 @@ Edit `/etc/hosts` :
 
 ```bash
 # Public
-192.168.56.71   node1.localdomain         node1
-192.168.56.72   node2.localdomain         node2
+192.168.56.105   node1.localdomain         node1
+192.168.56.106   node2.localdomain         node2
 
 # Private
 192.168.10.1    node1-priv.localdomain    node1-priv
