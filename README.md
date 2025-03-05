@@ -8,8 +8,8 @@
 2. **Operating System Configuration**
 3. **Configure Users and Groups**
 4. **Create Installation Directories**
-5. **Clone Node1 to Create Node2**
-6. **Configure Shared Disks Using Oracle ASM**
+5. **Configure Shared Disks Using Oracle ASM**
+6. **Clone Node1 to Create Node2**
 7. **Set Up `.bash_profile` for Grid and Oracle Users**
 8. **Install Oracle Grid Infrastructure**
 9. **Mounting ASM Disk Groups Using ASMCA**
@@ -242,7 +242,25 @@ SELINUXTYPE=targeted
 
 Before installing Oracle Grid Infrastructure and Oracle Database, you must create the necessary directories . These directories will store the Oracle software binaries, configuration files, and inventory.
 
-### **4.1 Create Directories for Grid Infrastructure**
+
+
+### **4.1 Create Directories for Oracle Database**
+
+create the following directories for Oracle Database:
+
+```bash
+sudo mkdir -p /u01/app/oracle/product/19.0.0/dbhome_1
+
+```
+
+Set the correct ownership and permissions:
+
+```bash
+sudo chown -R oracle:oinstall /u01
+sudo chmod -R 775 /u01
+
+```
+### **4.2 Create Directories for Grid Infrastructure**
 
 create the following directories for Oracle Grid Infrastructure:
 
@@ -261,35 +279,152 @@ sudo chmod -R 775 /u01/app
 
 ```
 
-### **4.2 Create Directories for Oracle Database**
 
-create the following directories for Oracle Database:
+---
+
+## **. Configure Shared Disks Using Oracle ASM**
+
+### 5.1 Create virtual disks steps:
+
+1. **Shut Down Both Virtual Machines**
+    - Ensure both `node1` and `node2` VMs are powered off.
+2. **Create First Shared Disk (DISK1)**
+    - Open **Oracle VirtualBox**.
+    - Select the `node1` VM.
+    - Click **Settings** → **Storage** → **SATA Controller** icon → **Add Hard Disk** button.
+    - In the pop-up window, click **Create new disk**.
+3. **Disk Configuration**
+    - **Hard Disk File Type:** Select `VDI (VirtualBox Disk Image)`. Click **Next**.
+    - **Storage on Physical Hard Disk:** Select **Fixed Size**. Click **Next**.
+    - **File Location and Size:**
+        - Click the folder icon and choose the parent folder of `node1`.
+        - Name the disk `DISK1.vdi` and set the size to **10 GB**.
+        - Click **Create**.
+4. **Create Additional Disks (DISK2 and DISK3)**
+    - Repeat the above steps to create `DISK2` and `DISK3`, each with **15 GB** size.
+    - Ensure they are saved in the same parent folder as `DISK1`.
+5. **Change Disks to Shareable**
+    - In VirtualBox, go to **File** → **Virtual Media Manager (Ctrl+D)**.
+    - Select `DISK1`, change its type to **Shareable**, and click **Apply**.
+    - Repeat for `DISK2` and `DISK3`.
+    - Close the **Virtual Media Manager** window.
+6. **Attach Shared Disks to `node2`**
+    - In Oracle VirtualBox, select the `node2` VM.
+    - Click **Settings** → **Storage**.
+    - Under **SATA Controller**, click the **Add Hard Disk** icon.
+    - Click **Choose existing disk** and select the shared disk (`DISK1`).
+    - Repeat for `DISK2` and `DISK3`.
+    - Click **OK** to close the storage settings.
+
+---
+
+### **5.2 Starting `node1` and Listing Shared Disks**
+
+1. **Start `node1`**
+    - Power on `node1`.
+2. **List Attached Disks**
+    
+    Run the following command to verify the attached shared disks:
+    
+    ```bash
+    ls /dev/sd*
+    ```
+    
+    You should see `sdb`, `sdc`, and `sdd` listed.
+    
+
+---
+
+### **5.3 Partitioning Shared Disks with `fdisk`**
+
+1. **Partition `DISK1` (`/dev/sdb`)**
+    
+    Run the `fdisk` utility:
+    
+    ```bash
+    fdisk /dev/sdb
+    ```
+    
+    - Follow these steps:
+        - Command: `n` (create new partition)
+        - Command: `p` (primary partition)
+        - Partition number: `1`
+        - Accept defaults for the first and last cylinders by pressing **Enter** twice.
+        - Command: `w` (write changes and exit).
+2. **Partition `DISK2` and `DISK3`**
+    - Repeat the `fdisk` steps for `/dev/sdc` and `/dev/sdd`.
+3. **List the Partitions**
+    
+    Verify the partitions have been created by running:
+    
+    ```bash
+    ls /dev/sd*
+    ```
+    
+
+### **5.4 Install Oracle ASM Library**
+
+Install the `oracleasm` library and tools:
 
 ```bash
-sudo mkdir -p /u01/app/oracle/product/19.0.0/dbhome_1
+sudo dnf install -y kmod-oracleasm oracleasm-support
+```
+
+### **5.5 Configure Oracle ASM**
+
+Run the Oracle ASM configuration tool:
+
+```bash
+sudo oracleasm configure -i
+```
+
+Provide the following inputs:
+
+- Default user to own the driver interface: `grid`
+- Default group to own the driver interface: `oinstall`
+- Start Oracle ASM library driver on boot: `y`
+- Scan for Oracle ASM disks on boot: `y`
+
+### **5.6 Initialize Oracle ASM**
+
+Initialize the Oracle ASM library:
+
+```bash
+sudo oracleasm init
+```
+
+### **5.7 Create ASM Disks**
+
+ Then, create ASM disks:
+
+```bash
+sudo oracleasm createdisk DISK1 /dev/sdb1
+sudo oracleasm createdisk DISK2 /dev/sdc1
+sudo oracleasm createdisk DISK3 /dev/sdd1
 
 ```
 
-Set the correct ownership and permissions:
+### **5.8 Verify ASM Disks**
+
+List the ASM disks:
 
 ```bash
-sudo chown -R oracle:oinstall /u01
-sudo chmod -R 775 /u01
+sudo oracleasm listdisks
 
 ```
 
 ---
 
-## **5. Clone Node1 to Create Node2**
+## **6. Clone Node1 to Create Node2**
 
-### **5.1. Prerequisites**
+### **6.1. Prerequisites**
 
 Ensure the following conditions are met before cloning:
 
 - The source VM (node1) is powered off to prevent data corruption or inconsistencies.
 - Adequate disk space is available for the clone.
 
-### **5.2. Cloning Process**
+### **6.2. Cloning Process**
 
 **Step 1: Launch Oracle VirtualBox**
 
@@ -323,7 +458,7 @@ In the VirtualBox Manager, locate and select the VM you want to clone.
 - Click **Clone** to begin the cloning process.
 - Wait for the cloning process to complete. This may take several minutes depending on the size of the VM.
 
-### **5.3 Update Hostname** :
+### **6.3 Update Hostname** :
 
 - Edit `hostname` on Node2 and change the hostname to `node2`.
     
@@ -333,7 +468,7 @@ In the VirtualBox Manager, locate and select the VM you want to clone.
     ```
     
 
-### 5.4 Configure Network on node2 :
+### 6.4 Configure Network on node2 :
 
 Since the cloned machine has new MAC addresses, you’ll need to update or recreate the connections to reflect these changes. `nmcli` associates network connections with specific MAC addresses, so the old connections might not work with the new ones. Here’s how you can resolve the issue:
 
@@ -424,7 +559,7 @@ nmcli connection up internet
 
 This should ensure the cloned machine uses new MAC addresses and IP configurations without conflicts. Let me know if you run into any issues!
 
-### 5.5 Verify the Connection between the Two Nodes:
+### 6.5 Verify the Connection between the Two Nodes:
 
 Login to every machine as root and make sure that they can ping each other :
 
@@ -442,138 +577,7 @@ ping -c 3 node2-priv.localdomain
 
 ---
 
-## **6. Configure Shared Disks Using Oracle ASM**
 
-### 6.1 Create virtual disks steps:
-
-1. **Shut Down Both Virtual Machines**
-    - Ensure both `node1` and `node2` VMs are powered off.
-2. **Create First Shared Disk (DISK1)**
-    - Open **Oracle VirtualBox**.
-    - Select the `node1` VM.
-    - Click **Settings** → **Storage** → **SATA Controller** icon → **Add Hard Disk** button.
-    - In the pop-up window, click **Create new disk**.
-3. **Disk Configuration**
-    - **Hard Disk File Type:** Select `VDI (VirtualBox Disk Image)`. Click **Next**.
-    - **Storage on Physical Hard Disk:** Select **Fixed Size**. Click **Next**.
-    - **File Location and Size:**
-        - Click the folder icon and choose the parent folder of `node1`.
-        - Name the disk `DISK1.vdi` and set the size to **10 GB**.
-        - Click **Create**.
-4. **Create Additional Disks (DISK2 and DISK3)**
-    - Repeat the above steps to create `DISK2` and `DISK3`, each with **15 GB** size.
-    - Ensure they are saved in the same parent folder as `DISK1`.
-5. **Change Disks to Shareable**
-    - In VirtualBox, go to **File** → **Virtual Media Manager (Ctrl+D)**.
-    - Select `DISK1`, change its type to **Shareable**, and click **Apply**.
-    - Repeat for `DISK2` and `DISK3`.
-    - Close the **Virtual Media Manager** window.
-6. **Attach Shared Disks to `node2`**
-    - In Oracle VirtualBox, select the `node2` VM.
-    - Click **Settings** → **Storage**.
-    - Under **SATA Controller**, click the **Add Hard Disk** icon.
-    - Click **Choose existing disk** and select the shared disk (`DISK1`).
-    - Repeat for `DISK2` and `DISK3`.
-    - Click **OK** to close the storage settings.
-
----
-
-### **6.2 Starting `node1` and Listing Shared Disks**
-
-1. **Start `node1`**
-    - Power on `node1`.
-2. **List Attached Disks**
-    
-    Run the following command to verify the attached shared disks:
-    
-    ```bash
-    ls /dev/sd*
-    ```
-    
-    You should see `sdb`, `sdc`, and `sdd` listed.
-    
-
----
-
-### **6.3 Partitioning Shared Disks with `fdisk`**
-
-1. **Partition `DISK1` (`/dev/sdb`)**
-    
-    Run the `fdisk` utility:
-    
-    ```bash
-    fdisk /dev/sdb
-    ```
-    
-    - Follow these steps:
-        - Command: `n` (create new partition)
-        - Command: `p` (primary partition)
-        - Partition number: `1`
-        - Accept defaults for the first and last cylinders by pressing **Enter** twice.
-        - Command: `w` (write changes and exit).
-2. **Partition `DISK2` and `DISK3`**
-    - Repeat the `fdisk` steps for `/dev/sdc` and `/dev/sdd`.
-3. **List the Partitions**
-    
-    Verify the partitions have been created by running:
-    
-    ```bash
-    ls /dev/sd*
-    ```
-    
-
-### **6.4 Install Oracle ASM Library**
-
-Install the `oracleasm` library and tools:
-
-```bash
-sudo dnf install -y kmod-oracleasm oracleasm-support
-```
-
-### **6.5 Configure Oracle ASM**
-
-Run the Oracle ASM configuration tool:
-
-```bash
-sudo oracleasm configure -i
-```
-
-Provide the following inputs:
-
-- Default user to own the driver interface: `grid`
-- Default group to own the driver interface: `oinstall`
-- Start Oracle ASM library driver on boot: `y`
-- Scan for Oracle ASM disks on boot: `y`
-
-### **6.6 Initialize Oracle ASM**
-
-Initialize the Oracle ASM library:
-
-```bash
-sudo oracleasm init
-```
-
-### **6.7 Create ASM Disks**
-
- Then, create ASM disks:
-
-```bash
-sudo oracleasm createdisk DISK1 /dev/sdb1
-sudo oracleasm createdisk DISK2 /dev/sdc1
-sudo oracleasm createdisk DISK3 /dev/sdd1
-
-```
-
-### **6.8 Verify ASM Disks**
-
-List the ASM disks:
-
-```bash
-sudo oracleasm listdisks
-
-```
-
----
 
 ## **7. Set Up `.bash_profile` for Grid and Oracle Users**
 
