@@ -26,11 +26,11 @@
 **Public Network (enp0s3)**:
 
 ```bash
-nmcli connection add type ethernet con-name "public" ifname enp0s3 \\
-ipv4.addresses "192.168.56.105/24" \\
-ipv4.gateway "192.168.56.1" \\
-ipv4.dns "192.168.56.1" \\
-ipv4.method "manual" \\
+nmcli connection add type ethernet con-name "public" ifname enp0s3 \
+ipv4.addresses "192.168.56.105/24" \
+ipv4.gateway "192.168.56.1" \
+ipv4.dns "192.168.56.1" \
+ipv4.method "manual" \
 connection.autoconnect "yes"
 
 ```
@@ -38,9 +38,9 @@ connection.autoconnect "yes"
 **Private Network (enp0s8)**:
 
 ```bash
-nmcli connection add type ethernet con-name "private" ifname enp0s8 \\
-ipv4.addresses "192.168.10.1/24" \\
-ipv4.method "manual" \\
+nmcli connection add type ethernet con-name "private" ifname enp0s8 \
+ipv4.addresses "192.168.10.1/24" \
+ipv4.method "manual" \
 connection.autoconnect "yes"
 
 ```
@@ -48,8 +48,8 @@ connection.autoconnect "yes"
 **Bridged Adapter (enp0s9):**
 
 ```bash
-nmcli connection add type ethernet con-name "internet" ifname enp0s9 \\
-ipv4.method "auto" \\
+nmcli connection add type ethernet con-name "internet" ifname enp0s9 \
+ipv4.method "auto" \
 connection.autoconnect "yes"
 
 ```
