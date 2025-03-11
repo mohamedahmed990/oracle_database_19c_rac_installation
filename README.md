@@ -54,7 +54,7 @@ connection.autoconnect "yes"
 
 ```
 
-### 1.2 List connections to verify creation:
+### **1.2 List connections to verify creation**:
 
 ```bash
 nmcli connection show
@@ -243,7 +243,7 @@ systemctl disable firewalld
 
 ```
 
-### 3.9 Set `selinux` to permissive
+### **3.9 Set `selinux` to permissive**
 
 ```bash
 cd /etc/selinux/
@@ -315,14 +315,14 @@ sudo chmod -R 775 /u01/app
 
 ## **5. Clone Node1 to Create Node2**
 
-### 5.1. Prerequisites**
+### **5.1. Prerequisites**
 
 Ensure the following conditions are met before cloning:
 
 - The source VM (node1) is powered off to prevent data corruption or inconsistencies.
 - Adequate disk space is available for the clone.
 
-### 5.2. Cloning Process**
+### **5.2. Cloning Process**
 
 **Step 1: Launch Oracle VirtualBox**
 
@@ -356,7 +356,7 @@ In the VirtualBox Manager, locate and select the VM you want to clone.
 - Click **Clone** to begin the cloning process.
 - Wait for the cloning process to complete. This may take several minutes depending on the size of the VM.
 
-### 5.3 Update Hostname** :
+### **5.3 Update Hostname** :
 
 - Edit `hostname` on Node2 and change the hostname to `node2`.
     
@@ -366,7 +366,7 @@ In the VirtualBox Manager, locate and select the VM you want to clone.
     ```
     
 
-### 5.4 Configure Network on node2 :
+### **5.4 Configure Network on node2** :
 
 Since the cloned machine has new MAC addresses, you’ll need to update or recreate the connections to reflect these changes. `nmcli` associates network connections with specific MAC addresses, so the old connections might not work with the new ones. Here’s how you can resolve the issue:
 
@@ -457,7 +457,7 @@ nmcli connection up internet
 
 This should ensure the cloned machine uses new MAC addresses and IP configurations without conflicts. Let me know if you run into any issues!
 
-### 5.5 Verify the Connection between the Two Nodes:
+### **5.5 Verify the Connection between the Two Nodes**:
 
 Login to every machine as root and make sure that they can ping each other :
 
@@ -477,7 +477,7 @@ ping -c 3 node2-priv.localdomain
 
 ## **6. Configure Shared Disks Using Oracle ASM**
 
-### 6.1 Create virtual disks steps:
+### **6.1 Create virtual disks steps**:
 
 1. **Shut Down Both Virtual Machines**
     - Ensure both `node1` and `node2` VMs are powered off.
@@ -511,7 +511,7 @@ ping -c 3 node2-priv.localdomain
 
 ---
 
-### 6.2 Starting `node1` and Listing Shared Disks**
+### **6.2 Starting `node1` and Listing Shared Disks**
 
 1. **Start `node1`**
     - Power on `node1`.
@@ -528,7 +528,7 @@ ping -c 3 node2-priv.localdomain
 
 ---
 
-### 6.3 Partitioning Shared Disks with `fdisk`**
+### **6.3 Partitioning Shared Disks with `fdisk`**
 
 1. **Partition `DISK1` (`/dev/sdb`)**
     
@@ -556,7 +556,7 @@ ping -c 3 node2-priv.localdomain
     
 
 
-### 6.4 Create ASM Disks**
+### **6.4 Create ASM Disks**
 
  Then, create ASM disks:
 
@@ -567,7 +567,7 @@ sudo oracleasm createdisk DISK3 /dev/sdd1
 
 ```
 
-### 6.5 Verify ASM Disks**
+### **6.5 Verify ASM Disks**
 
 List the ASM disks:
 
@@ -743,7 +743,7 @@ source ~/.bash_profile
 
 ## **8. Install Oracle Grid Infrastructure**
 
-### 8.1 Copy Grid Infrastructure Software to your machine using winscp (node1)
+### **8.1 Copy Grid Infrastructure Software to your machine using winscp (node1)**
 
 as grid user , copy grid software to your grid  home (`/home/grid`) and ensure it’s exist :
 
@@ -753,14 +753,14 @@ ls /home/grid/LINUX.X64_193000_grid_home.zip
 
 ```
 
-### 8.2 Extract Grid Software in the $ORACLE_HOME of the grid user :
+### **8.2 Extract Grid Software in the $ORACLE_HOME of the grid user** :
 
 ```bash
 unzip LINUX.X64_193000_grid_home.zip -d $ORACLE_HOME/
 
 ```
 
-### 8.3 Create SSH Passwordless connection to grid user
+### **8.3 Create SSH Passwordless connection to grid user**
 
 ```bash
 cd $ORACLE_HOME/deinstall
