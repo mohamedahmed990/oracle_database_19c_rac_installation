@@ -1052,7 +1052,7 @@ cd $ORACLE_HOME
     - **Software Location:** `/u01/app/oracle/product/19.0.0/db_home/`
     - Note: These values are taken from the OS environment variables.
 8. **Operating System Groups:**
-    - Select the `dba` group for all options except `OSOPER` (leave it blank).
+    - Select the `oinstall` group for all options except `OSOPER` (leave it blank).
     - Click **Next**.
 9. **Prerequisite Checks:**
     - The following warnings can be safely ignored:
