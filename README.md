@@ -285,7 +285,6 @@ To switch to a different default kernel, run the following command making sure t
 
         sudo grubby --set-default /boot/vmlinuz-4.18.0-513.5.1.el8_9.x86_64
     
-
     ```
 
 ---
