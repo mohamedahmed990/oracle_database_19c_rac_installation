@@ -64,9 +64,9 @@ nmcli connection show
 ### **1.3 Manually activate any connection (optional)**:
 
 ```bash
-nmcli connection up public
-nmcli connection up private
-nmcli connection up internet
+nmcli connection up enp0s3
+nmcli connection up enp0s8
+nmcli connection up enp0s9
 
 ```
 
