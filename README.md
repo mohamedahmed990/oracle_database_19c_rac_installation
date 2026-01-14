@@ -400,19 +400,13 @@ nmcli connection show
 If the old connections still reference the previous MAC addresses, you can delete them:
 
 ```bash
-nmcli connection delete public
-nmcli connection delete private
-nmcli connection delete internet
+nmcli connection delete enp0s3
+nmcli connection delete enp0s8
+nmcli connection delete enp0s9
 
 ```
 
 **2. Create New Connections (with the new MAC addresses)**
-
-Since your cloned machine has the following interface names:
-
-- `enp0s3` for Public
-- `enp0s8` for Private
-- `enp0s9` for Internet
 
 You can recreate the connections as follows:
 
@@ -468,9 +462,9 @@ nmcli connection show
 Manually activate the connections (if needed):
 
 ```bash
-nmcli connection up public
-nmcli connection up private
-nmcli connection up internet
+nmcli connection up enp0s3
+nmcli connection up enp0s8
+nmcli connection up enp0s9
 
 ```
 
