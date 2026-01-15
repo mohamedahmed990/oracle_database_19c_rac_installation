@@ -832,9 +832,31 @@ now in `node2`, install it using `root`
 rpm -iv cvuqdisk-1.0.10-1.rpm
 ```
 
+
+
+Solve expected errors and problems during installation :
+
+```bash
+su - 
+cp -p /usr/bin/scp /usr/bin/scp.bkp
+echo "/usr/bin/scp.bkp -T \$*" > /usr/bin/scp
+```
+
+```bash
+export CV_ASSUME_DISTID=OEL7.9
+```
+
+Set `DISPLAY` environment variable for both `root` and `grid` users :
+
+```bash
+export DISPLAY=:0.0
+xhost +
+```
+
+
 ### **8.5 Run the Grid Installer**
 
-On Node1, run the Grid Infrastructure installer:
+On Node1 ,As grid user, run the Grid Infrastructure installer:
 
 ```bash
 cd $ORACLE_HOME
