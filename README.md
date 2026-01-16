@@ -275,17 +275,15 @@ SELINUXTYPE=targeted
     ```bash
 
         ls -1 /boot/vmlinuz*
-    
     ```
+    
 + Use the grubby --set-default command to set the default kernel.
 
 To switch to a different default kernel, run the following command making sure to specify the full path to the selected default kernel:
 
-    ```bash 
-
+  ```bash
         sudo grubby --set-default /boot/vmlinuz-4.18.0-513.5.1.el8_9.x86_64
-    
-    ```
+  ```
 
 ---
 
