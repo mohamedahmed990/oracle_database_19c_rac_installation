@@ -974,14 +974,14 @@ cd $ORACLE_HOME
 In node1, check the status of the running clusterware resources. The state of all the resources should be ONLINE:
 
 ```bash
-crsctl status resource -t
+/u01/app/19.0.0/grid/bin/crsctl status resource -t
 
 ```
 
 Ensure that all the cluster services are up and running in all the cluster nodes:
 
 ```bash
-crsctl check cluster -all
+/u01/app/19.0.0/grid/bin/crsctl check cluster -all
 
 ```
 
