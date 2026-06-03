@@ -8,14 +8,14 @@
 2. **[Configure Users and Groups](#2-configure-users-and-groups)**  
 3. **[Operating System Configuration](#3-operating-system-configuration)** 
 4. **[Create Installation Directories](#4-create-installaton-direcrories)**
-5. **[Clone Node1 to Create Node2](#clone-node1-to-create-node2)**
-6. **[Configure Shared Disks Using Oracle ASM](#configure-shared-disks-using-oracle-asm)**
-7. **[Set Up `.bash_profile` for Grid and Oracle Users](#set-up-`.bash_profile`-for-grid-and-oracle-users)**
-8. **[Install Oracle Grid Infrastructure](#install-oracle-grid-infrastructure)**
-9. **[Mounting ASM Disk Groups Using ASMCA](#mounting-asm-disks-groups-using-asmca)**
-10. **[Install Oracle Database Software](#install-oracle-database-software)**
-11. **[Create a RAC Database](#create-a-rac-database)**
-12. **[Verification and Testing](#verificaton-and-testing)**
+5. **[Clone Node1 to Create Node2](#5-clone-node1-to-create-node2)**
+6. **[Configure Shared Disks Using Oracle ASM](#6-configure-shared-disks-using-oracle-asm)**
+7. **[Set Up `.bash_profile` for Grid and Oracle Users](#7-set-up-`.bash_profile`-for-grid-and-oracle-users)**
+8. **[Install Oracle Grid Infrastructure](#8-install-oracle-grid-infrastructure)**
+9. **[Mounting ASM Disk Groups Using ASMCA](#9-mounting-asm-disks-groups-using-asmca)**
+10. **[Install Oracle Database Software](#10-install-oracle-database-software)**
+11. **[Create a RAC Database](#11-create-a-rac-database)**
+12. **[Verification and Testing](#12verificaton-and-testing)**
 
 ---
 
@@ -136,7 +136,7 @@ sudo passwd grid
 
 ---
 
-## 3.**Operating System Configuration**
+## **3. Operating System Configuration**
 
 ### **3.1 Update the System**
 
