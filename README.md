@@ -15,7 +15,7 @@
 9. **[Mounting ASM Disk Groups Using ASMCA](#9-mounting-asm-disks-groups-using-asmca)**
 10. **[Install Oracle Database Software](#10-install-oracle-database-software)**
 11. **[Create a RAC Database](#11-create-a-rac-database)**
-12. **[Verification and Testing](#12verificaton-and-testing)**
+12. **[Verification and Testing](#12-verificaton-and-testing)**
 
 ---
 
