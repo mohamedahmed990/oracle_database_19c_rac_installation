@@ -4,7 +4,7 @@
 
 ### **Table of Contents**
 
-1. **Prepare Network Requirements**(#prepare-network-requirements)
+1. [**Prepare Network Requirements**](#prepare-network-requirements)
 2. **Operating System Configuration**
 3. **Configure Users and Groups**
 4. **Create Installation Directories**
