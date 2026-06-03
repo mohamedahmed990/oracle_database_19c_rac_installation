@@ -5,10 +5,10 @@
 ### **Table of Contents**
 
 1. **[Prepare Network Requirements](#1-prepare-network-requirements)**
-2. **[Operating System Configuration](#operating-system-configuration)**
-3. **[Configure Users and Groups](#configure-users-and-groups)**
-4. **[Create Installation Directories](#create-installaton-direcrories)**
-5. **Clone Node1 to Create Node2](#clone-node1-to-create-node2)**
+2. **[Configure Users and Groups](#2-configure-users-and-groups)**  
+3. **[Operating System Configuration](#3-operating-system-configuration)** 
+4. **[Create Installation Directories](#4-create-installaton-direcrories)**
+5. **[Clone Node1 to Create Node2](#clone-node1-to-create-node2)**
 6. **[Configure Shared Disks Using Oracle ASM](#configure-shared-disks-using-oracle-asm)**
 7. **[Set Up `.bash_profile` for Grid and Oracle Users](#set-up-`.bash_profile`-for-grid-and-oracle-users)**
 8. **[Install Oracle Grid Infrastructure](#install-oracle-grid-infrastructure)**
