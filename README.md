@@ -136,7 +136,7 @@ sudo passwd grid
 
 ---
 
-## **Operating System Configuration**
+## 3.**Operating System Configuration**
 
 ### **3.1 Update the System**
 
