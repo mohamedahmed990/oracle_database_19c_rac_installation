@@ -4,18 +4,18 @@
 
 ### **Table of Contents**
 
-1. [**Prepare Network Requirements**](#prepare-network-requirements)
-2. **Operating System Configuration**
-3. **Configure Users and Groups**
-4. **Create Installation Directories**
-5. **Clone Node1 to Create Node2**
-6. **Configure Shared Disks Using Oracle ASM**
-7. **Set Up `.bash_profile` for Grid and Oracle Users**
-8. **Install Oracle Grid Infrastructure**
-9. **Mounting ASM Disk Groups Using ASMCA**
-10. **Install Oracle Database Software**
-11. **Create a RAC Database**
-12. **Verification and Testing**
+1. **[Prepare Network Requirements](#prepare-network-requirements)**
+2. **[Operating System Configuration](#operating-system-configuration)**
+3. **[Configure Users and Groups](#configure-users-and-groups)**
+4. **[Create Installation Directories](#create-installaton-direcrories)**
+5. **Clone Node1 to Create Node2](#clone-node1-to-create-node2)**
+6. **[Configure Shared Disks Using Oracle ASM](#configure-shared-disks-using-oracle-asm)**
+7. **[Set Up `.bash_profile` for Grid and Oracle Users](#set-up-`.bash_profile`-for-grid-and-oracle-users)**
+8. **[Install Oracle Grid Infrastructure](#install-oracle-grid-infrastructure)**
+9. **[Mounting ASM Disk Groups Using ASMCA](#mounting-asm-disks-groups-using-asmca)**
+10. **[Install Oracle Database Software](#install-oracle-database-software)**
+11. **[Create a RAC Database](#create-a-rac-database)**
+12. **[Verification and Testing](#verificaton-and-testing)**
 
 ---
 
